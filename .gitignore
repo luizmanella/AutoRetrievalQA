@@ -1,0 +1,9 @@
+arqa-venv/
+__pycache__/
+app/__pycache__/
+test_scripts/
+.env
+.idea
+app/arqa-users/
+app/preset_questionnaires/
+test_directory/

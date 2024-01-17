@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block importblock %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/view_questionnaire.css') }}">
+{% endblock %}
+
+{% block mainblock %}
+<div class="container-fluid px-5 pb-5">
+    <div class="my-4">
+        <div class="d-flex">
+            <h1 class="my-4">Chat History</h1>
+        </div>
+        <h4 class="mb-0 mt-3 pb-0">File:</h4>
+        <input type="text" class="form-control my-3" placeholder="Name" aria-label="new questionnaire name"
+            value="{{ target_info['filename'] }}" disabled>
+        <table class="table mt-5">
+            <thead>
+                <th>Timestamp</th>
+                <th>Question</th>
+                <th>Answer</th>
+            </thead>
+            <tbody>
+                {% if chat_history|length %}
+                {% for row in chat_history %}
+                <tr>
+                    <td>{{row['timestamp']}}</td>
+                    <td>{{row['question']}}</td>
+                    <td>{{row['answer']}}</td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                    <td colspan="3">No chat history found.</td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

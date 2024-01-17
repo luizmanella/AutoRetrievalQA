@@ -1,0 +1,15 @@
+a {
+    min-width: 10em;
+}
+
+#view_chat_history_a_tag {
+    all: initial;
+}
+
+#view_chat_history_a_tag:hover {
+    cursor: pointer;
+}
+
+.workspace-div {
+    overflow-y: auto;
+}

@@ -1,0 +1,57 @@
+#pdf-container {
+    height: 100%;
+    width: 50%;
+}
+
+#chat-space {
+    height: 100%;
+    background-color: rgb(255, 255, 255);
+    padding: 10px;
+    overflow-y: auto;
+}
+
+
+
+.chat-content {
+    padding: 10px 15px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    position: relative;
+    border-radius: 5px;
+    max-width: 80%;
+}
+
+.chat-content p {
+    text-wrap: wrap;
+    padding: 5px;
+}
+
+.user-question {
+    /* border: 1px solid rgb(221, 221, 221); */
+    background-color: aliceblue;
+}
+
+.llm-response {
+    /* border: 1px solid rgb(221, 221, 221); */
+    background-color: rgb(240, 240, 240);
+}
+
+.split-screen {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 100%;
+    height: 100%;
+}
+
+
+#chat-history-modal {
+    max-height: 90%;
+}
+
+#chat-history-modal modal-body {
+    overflow-y: auto;
+}
+
+.full-screen-div {
+    overflow-y: hidden !important;
+}

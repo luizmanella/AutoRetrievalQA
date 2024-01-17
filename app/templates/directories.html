@@ -1,0 +1,163 @@
+{% extends 'base.html' %}
+
+{% block importblock %}
+<script defer src="{{ url_for('static', filename='js/directories.js') }}"></script>
+{% endblock %}
+
+{% block mainblock %}
+<div class="container-fluid px-5 pb-5">
+    <!-- <div class="align-items-center mt-4" style="position: relative;">
+        <div class="input-group col-lg-5 col-md-9 col-sm-9 autocomplete">
+            <span class="input-group-text rounded-start-pill"><i class='bx bx-search-alt-2'></i></span>
+            <input class="form-control ticker_input rounded-end-pill" id="ticker_input" type="text"
+                placeholder="Search">
+        </div>
+    </div> -->
+
+    <div class="d-flex flex-row my-3">
+        {% for item in display_path %}
+        <div class="pe-2">
+            <a href="{{ item['url'] }}" class="path_a_tag align-text-bottom">{{ item['filename'] }}</a>
+            {% if item['last'] is sameas false %}
+            <i class='bx bx-chevron-right px-3'></i>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    <div class="d-flex">
+
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-outline-primary me-2" data-bs-toggle="modal"
+            data-bs-target="#new_folder_modal">New Folder</button>
+        <button type="button" class="btn btn-outline-primary me-2 me-auto" data-bs-toggle="modal"
+            data-bs-target="#upload_modal">Upload File</button>
+        <button id="delete-selected" type="button" class="btn btn-outline-danger" disabled>Delete</button>
+    </div>
+    <!-- -------------------- -->
+
+
+
+    <table class="table">
+        <thead>
+            <th></th>
+            <th>Name</th>
+            <th>Questionnaire(s)</th>
+            <th>Modified</th>
+            <th></th>
+        </thead>
+        <tbody>
+            {% if targets|length %}
+            {% for row in targets %}
+            <tr id="{{row['id']}}" data-file-type="{{row['type']}}">
+                <td>
+                    <input class="form-check-input" type="checkbox" value="" data-id="{{row['id']}}">
+                </td>
+                <td>
+                    {% if row['type'] == 'folder' %}
+                    <i class='bx bx-folder bi pe-none me-2'></i>
+                    {% else %}
+                    <i class='bx bxs-file-pdf'></i>
+                    {% endif %}
+                    {{ row['filename'] }}
+                </td>
+                <td>{{ row['tag'] }}</td>
+                <td>{{ row['last_modified'] }}</td>
+                <td>
+                    {% if row['starred'] == 1 %}
+                    <i data-id="{{row['id']}}" class='bx bxs-star star-icon' style="color: rgb(255, 213, 0)"
+                        data-bs-toggle="tooltip" data-bs-title="Save to Favorites"></i>
+                    {% else %}
+                    <i data-id="{{row['id']}}" class='bx bx-star star-icon'></i>
+                    {% endif %}
+                    {% if row['type'] == 'file' %}
+                    <i class='bx bx-note me-1 view_chat_history_reroute_tag'
+                        data-target-url="/view_chat_history/{{row['id']}}" data-bs-toggle="tooltip"
+                        data-bs-title="Chat History"></i>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr>
+                <td colspan="5">No files found.</td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+    <!-- Modals -->
+    <div class="modal fade" id="new_folder_modal" tabindex="-1" data-bs-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5">New File</h1>
+                </div>
+                <div class="modal-body">
+                    <input id="new_folder_name" name="new_folder_name" type="text" class="form-control"
+                        placeholder="File name" aria-label="File name">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary button-min-width"
+                        data-bs-dismiss="modal">Close</button>
+                    <button id="save_new_folder" type="button" class="btn btn-primary button-min-width">Save
+                        changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="upload_modal" tabindex="-1" data-bs-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Upload Content</h1>
+                </div>
+                <div class="modal-body">
+                    <div id="loading-spinner" class="hide">
+                        <div class="d-flex align-items-center">
+                            <h4 role="status">Uploading and Transforming...</h4>
+                            <div class="spinner-grow spinner-grow-sm ms-auto" aria-hidden="true"></div>
+                        </div>
+                    </div>
+                    <div id="upload-form-div">
+                        <input class="form-control" type="file" id="formFile" accept=".pdf">
+                        <h6 class="mt-3">Questionnaire:</h6>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                id="no_questionnaire_radio" data-radio-class="preset" checked>
+                            <label class="form-check-label" for="no-questionnaire">
+                                No questionnaire
+                            </label>
+                        </div>
+                        {% if presets_metadata|length %}
+                        {% for preset in presets_metadata %}
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                id="{{preset['questionnaire_name']}}_radio" data-radio-class="preset">
+                            <label class="form-check-label" for="{{preset['questionnaire_name']}}_radio">
+                                {{preset['questionnaire_name']}} (Preset)
+                            </label>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+                        {% if questionnaires|length %}
+                        {% for q in questionnaires %}
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="{{q['qid']}}_radio"
+                                data-radio-class="custom">
+                            <label class="form-check-label" for="{{q['questionnaire_name']}}_radio">
+                                {{q['questionnaire_name']}}
+                            </label>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+
+                    </div>
+                </div>
+                <div id="upload-modal-footer" class="modal-footer">
+                    <div type="button" class="btn btn-secondary button-min-width" data-bs-dismiss="modal">Close</div>
+                    <div id="upload_file_btn" type="button" class="btn btn-primary">Upload</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

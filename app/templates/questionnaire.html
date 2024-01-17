@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block importblock %}
+<script defer src="{{ url_for('static', filename='js/questionnaire.js') }}"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/questionnaire.css') }}">
+{% endblock %}
+
+{% block mainblock %}
+<div class="container-fluid px-5 pb-5">
+
+    <h1 class="mt-4">Questionnaires</h1>
+    {% if presets|length %}
+    <h3 class="mt-4">Preset Options</h3>
+    <div class="row">
+        {% for preset in presets %}
+        <div class="col-sm-6 mb-3 mb-sm-0">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{preset['questionnaire_name']}}</h5>
+                    <p class="card-text">{{preset['description']}}</p>
+                    <a href="view_preset/{{preset['questionnaire_name']}}" class="btn btn-primary">View</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <h3 class="mt-4">Custom Made</h3>
+    <div class="d-flex my-3">
+        <!-- Button trigger modal -->
+        <a href="/create_questionnaire" class="btn btn-outline-primary me-2" tabindex="-1" role="button"
+            aria-disabled="true">Create New</a>
+        <button id="delete-selected" type="button" class="btn btn-outline-danger ms-auto" disabled>Delete</button>
+
+    </div>
+
+    <table class="table">
+        <thead>
+            <th width="4%">
+                <input id="select-all" class="form-check-input" type="checkbox" value="">
+            </th>
+            <th>Name</th>
+            <th>Description</th>
+            <th></th>
+        </thead>
+        <tbody id="questionnaire-list">
+            {% if questionnaires|length %}
+            {% for row in questionnaires %}
+            <tr id="{{row['qid']}}">
+                <td style="vertical-align: middle;">
+                    <input class="form-check-input" type="checkbox" value="" data-id="{{row['qid']}}">
+                </td>
+                <td style="vertical-align: middle;">
+                    {{row['questionnaire_name']}}
+                    <i id="tag-color-square" class='bx bxs-square-rounded ms-3' data-bs-toggle="modal"
+                        data-bs-target="#color_picker"
+                        style="font-size: 10px; color: rgb({{row['tag_color'][0]}}, {{row['tag_color'][1]}}, {{row['tag_color'][2]}})"></i>
+                </td>
+                <td>
+                    {{row['description']}}
+                </td>
+                <td style="vertical-align: middle;">
+                    <div class="d-flex ms-auto">
+                        <a href="/edit_questionnaire/{{row['qid']}}" class="ms-auto">
+                            <i class='bx bxs-edit'></i>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr>
+                <td colspan="4">No questionnaire created yet.</td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

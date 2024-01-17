@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block importblock %}
+<script defer src="{{ url_for('static', filename='js/edit_questionnaire.js') }}"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/edit_questionnaire.css') }}">
+{% endblock %}
+
+{% block mainblock %}
+<div class="container-fluid px-5 pb-5">
+    <div class="my-5">
+        <h3 class="my-4">Edit Questionnaire</h3>
+        <h5>Name:</h5>
+        <input id="new_questionnaire_name" name="new_questionnaire_name" type="text" class="form-control my-3"
+            placeholder="Name" aria-label="new questionnaire name" value="{{ questionnaire_name }}">
+        <div class="d-flex my-3">
+            <h5 class="">Tag Color:</h5>
+            <i id="tag-color-square" class='bx bxs-square-rounded ms-3' data-bs-toggle="modal"
+                data-bs-target="#color_picker" style="color: rgb({{tag_color[0]}}, {{tag_color[1]}}, {{tag_color[2]}})"></i>
+        </div>
+        <h5>Description:</h5>
+        <div class="form-floating">
+            {% if description == "-" %}
+            <textarea class="form-control" placeholder="Description" id="floatingTextarea"></textarea>
+            {% else %}
+            <textarea class="form-control" placeholder="Description" id="floatingTextarea">{{description}}</textarea>
+            {% endif %}
+            <label for="floatingTextarea">(Optional Description)</label>
+        </div>
+
+        <table class="table mt-4">
+            <thead>
+                <th style="width: 4%;">
+                    <input id="select-all" class="form-check-input" type="checkbox" value="">
+                </th>
+                <th style="width: 4%;">#</th>
+                <th>Questions <span style="font-weight: 100;">(max questions 100)</span></th>
+            </thead>
+            <tbody id="questionnaire">
+                {% for q in questions %}
+                <tr>
+                    <td>
+                        <input class="form-check-input" type="checkbox" value="" data-id="{{q['#']-1}}">
+                    </td>
+                    <td>{{q['#']}}</td>
+                    <td>
+                        <input name="question" type="text" class="form-control" placeholder="Question"
+                            aria-label="question" value="{{ q['question'] }}">
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="d-flex mt-5">
+            <button type="button" class="btn btn-outline-primary" onclick="create_new_question()">Add
+                Question</button>
+            <button id="delete-selected" type="button" class="btn btn-outline-danger ms-2" disabled>Delete</button>
+            <button id="save-questionnaire" type="button" class="btn btn-primary ms-auto">Save</button>
+            <button id="confirm-save" type="button" class="btn btn-success ms-auto hide-btn"
+                onclick="save_edited_questionnaire()">Confirm</button>
+            <button id="cancel-save" type="button" class="btn btn-danger ms-2 hide-btn">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade modal-xl" id="color_picker" tabindex="-1" data-bs-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Pick Color</h1>
+            </div>
+            <div class="modal-body">
+                <div class="color-picker"></div>
+            </div>
+            <div id="upload-modal-footer" class="modal-footer">
+                <div type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</div>
+                <div id="select-color-btn" type="button" class="btn btn-primary">Select</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
