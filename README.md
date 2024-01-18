@@ -12,22 +12,43 @@
     <li>OPEN_AI_KEY</li>
 </ul>
 <h5>Additional Steps</h5>
-Once you have the prior steps completed, you will want to create an <i>.env</i> file in your project. The environment file will contain environment variables that are used in the app. You may notice the <i>.env</i> file is listed in the <i>.gitignore</i> file. The reason for this is the local file is used for local developement, where as you will set the environment variables in Azure with different values. In addition to the keys listed above, you will want to instantiate the following variables:
+Once you have the prior steps completed, you will want to create an <i>.env</i> file in your project. The environment file will contain environment variables that are used in the app. You may notice the <i>.env</i> file is listed in the <i>.gitignore</i> file. The reason for this is the file is used for local developement, where as you will set the environment variables in Azure with different values. In addition to the keys listed above, you will want to instantiate the following variables:
 <ul>
     <li>
         ARQA_PRESETS
         <ul>
-            <li>Locally it is the path to the preset questionnaires (i.e. app/preset_questionnaires)</li>
-            <li>Globally, it is the path to a file storage (this can be easily set up with Azure and connected directly to your app)</li>
+            <li>Locally it is the path to the preset questionnaires.</li>
+            <li>In deployment, it is the path to a file storage (this can be easily set up with Azure and connected directly to your app)</li>
         </ul>
     </li>
     <li>
         ARQA_USERS
         <ul>
-            <li>Locally it is the path to where you will store metadata about a client (i.e. app/arqa_users). It is not sensitive information. </li>
+            <li>Locally it is the path to where you will store metadata about a client, such as chat history, document uploads. </li>
+            <li>In deployment, it is the path to a file storage as well.
+        </ul>
+    </li>
+    <li>
+        APP_SECRET_KEY
+        <ul>
+            <li>This is a secret variable that you can create but shouldn't share. It's a requisite step in any Flask application. I recommend making a different key for local development and deployment.</li>
+        </ul>
+    </li>
+    <li>
+        K_SIMILAR
+        <ul>
+            <li>This is an integer that represents the number of most similar embedded batches to the user's question which will be used to answer the question. The larger the number, the more information the system can use to answer the question, but the more tokens are required of the LLM.</li>
+            <li>The value can be the same locally and globally. It is your choice.</li>
+        </ul>
+    </li>
+    <li>
+        MAX_TOKENS
+        <ul>
+            <li>This value can be the same locally and in deployment. It determines the maximum token variable for the response of the LLM. The value will determine the cost of the responses and the maximum length of the responses.</li>
         </ul>
     </li>
 </ul>
+
 
 <h3>Comments For Developers</h3>
 <p>When creating questionnaires, there is a limited number of questions that is not customizable through the website. To change that number, you have to make two small changes. In the "create_questionnaire.js" file, change the variable located at the top, named <i>max_number_of_questions</i>. Next, in the "create_questionnaire.html" file, scro</p>
