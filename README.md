@@ -1,6 +1,7 @@
 # AutoRetrievalQA
+![image](https://github.com/luizmanella/AutoRetrievalQA/assets/39210022/1e012340-bd33-4871-8b79-f67e1788a094)
+
 <h1>ARQA</h1>
-![Alt Text](https://github.com/luizmanella/AutoRetrievalQA/blob/main/ARQA_logo.jpeg)
 <p>AutoRetrievalQA (ARQA) is an LLM-based application designed to automatically process a document by answering pre-built questionnaires. The project runs as a Flask application, and is a fully developed web app with authentication handled by Auth0. Users can upload documents and tag them with a specific questionnaire. In the back end, a LLM-based pipeline will process the document and answer the questions of the questionnaire. The app is primed for expansion and improvements. For example, we used cosine similarity to determine the most important parts of the document. The way we break the document to compute the similarity scores is rudimentary and could be improved. Furthermore, if multiple documents are processed with the same questionnaire, business intelligence can be generated from them.</p>
 
 <h3>Comments For Developers</h3>
