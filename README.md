@@ -1,9 +1,9 @@
 # AutoRetrievalQA - ARQA
 ![image](https://github.com/luizmanella/AutoRetrievalQA/assets/39210022/1e012340-bd33-4871-8b79-f67e1788a094)
 
-<p>AutoRetrievalQA (ARQA) is an LLM-based application designed to automatically process a document by answering pre-built questionnaires. The project runs as a Flask application deployed through Azure, and is a fully developed web app with authentication handled by Auth0. Users can upload documents and tag them with a specific questionnaire. In the back end, a LLM-based pipeline will process the document and answer the questions of the questionnaire. The app is primed for expansion and improvements. For example, we used cosine similarity to determine the most important parts of the document. The way we break the document to compute the similarity scores is rudimentary and could be improved. Furthermore, if multiple documents are processed with the same questionnaire, business intelligence can be generated from them.</p>
+<p>AutoRetrievalQA (ARQA) is an LLM-based application designed to automatically process a document by answering pre-built questionnaires. The project runs as a Flask application deployed through Azure, and is a fully developed web app with authentication handled by Auth0. Users can upload documents and tag them with a specific questionnaire. In the back end, a LLM-based pipeline will process the document and answer the questions of the questionnaire. The app is primed for expansion and improvements. For example, I used cosine similarity to determine the most important parts of the document. The way I break the document to compute the similarity scores is rudimentary and could be improved. Furthermore, if multiple documents are processed with the same questionnaire, business intelligence can be generated from them.</p>
 
-<h3>Requisite Steps</h3>
+<h2>Requisite Steps</h2>
 <p>In order to start working with the application, you'll need to set up a web application and configure the appropriate resources with Azure. I recommend connecting your GitHub repository to your application so you can use Actions to facilitate creating a CI/CD pipeline. You will also need to create an account and configure resources with Auth0. Lastly, you'll need an account with OpenAI in order to use their pipelines. Once you have configure everything appropriately, you will need the following keys:</p>
 <ul>
     <li>AUTH0 CLIENT ID</li>
@@ -11,7 +11,11 @@
     <li>AUTH0_DOMAIN</li>
     <li>OPEN_AI_KEY</li>
 </ul>
-<h5>Additional Steps</h5>
+<h3>Azure Step - Comment</h3>
+<p>Given the way I have step up the project, when you set up the environment in Azure to deploy the web app, you will need to set a <b>Startup Command</b>. Copy and paste the following into the box:</p>
+<pre>gunicorn --bind=0.0.0.0 startup:app --timeout 600</pre>
+
+<h3>Additional Steps</h3>
 Once you have the prior steps completed, you will want to create an <i>.env</i> file in your project. The environment file will contain environment variables that are used in the app. You may notice the <i>.env</i> file is listed in the <i>.gitignore</i> file. The reason for this is the file is used for local developement, where as you will set the environment variables in Azure with different values. In addition to the keys listed above, you will want to instantiate the following variables:
 <ul>
     <li>
@@ -50,10 +54,10 @@ Once you have the prior steps completed, you will want to create an <i>.env</i> 
 </ul>
 
 
-<h3>Comments For Developers</h3>
+<h2>Comments For Developers</h2>
 <p>When creating questionnaires, there is a limited number of questions that is not customizable through the website. To change that number, you have to make two small changes. In the "create_questionnaire.js" file, change the variable located at the top, named <i>max_number_of_questions</i>. Next, in the "create_questionnaire.html" file, scro</p>
 <p>If your application is specific enough such that many documents are expected to use the same questionnaire, you can create preset questionnaires which would appear at the top of the Questionnaires page, and other appropriate areas. If you have no presets, then nothing will appear. The moment you add one, it will automatically pop-up where intended.</p>
-<h5>How to create a preset questionnaire:</h5>
+<h3>How to create a preset questionnaire:</h3>
 <ol>
     <li>Navigate to the preset_questionnaires directory</li>
     <li>
@@ -77,3 +81,11 @@ Once you have the prior steps completed, you will want to create an <i>.env</i> 
         </pre>
     </li>
 </ol>   
+
+<h2>Launching Locally</h2>
+<p>Once you have set up Azure and Auth0, and you cloned the repository, recommend setting up a virtual environment and installing the packages in the <i>requirements.txt</i> file. Once you have done this, activate the virtual environment, navigate to the directory containing the <i>startup.py</i> file, and run the following command:</p>
+<pre>flask --app app run --debug</pre>
+<p>For reference, I like running on debug mode so any changes I make can be seen by simply refreshing the website rather than restarting the app. If you prefer not to, remove the debug tag. Also, if you make any changes to the <i>.env</i> file, you will have to restart the application for the changes to take effect, even if you were on debug mode.</p>
+
+<h2>Future Development</h2>
+While I may not develop this application further, I would love to see if it goes anywhere. Reach out with any questions or to let me know how far you've taken it from this point.
