@@ -11,7 +11,7 @@
     <li>Navigate to the preset_questionnaires directory</li>
     <li>
         In the presets_metadata.json, append a dictionary with the following structure: (For reference tag color is the RGB values)
-        `{
+        <pre>{
             "questionnaire_name": "Questionnaire name",
             "tag_color": [
                 132, 
@@ -19,7 +19,7 @@
                 174
             ],
             "description": "A 20 question questionnaire which covers high level deal/fund structure, investment strategy, and closing mechanics."
-        }`
+        }</pre>
     </li>
     <li>
         Now, create a json file with the same name as the "questionnaire_name", with the following structure:
@@ -32,6 +32,6 @@
                 "#": 1,
                 "question": "Question number 2? "
             },
-        ]
+        ]```
     </li>
 </ol>   
