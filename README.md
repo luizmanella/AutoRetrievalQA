@@ -3,6 +3,18 @@
 
 <p>AutoRetrievalQA (ARQA) is an LLM-based application designed to automatically process a document by answering pre-built questionnaires. The project runs as a Flask application deployed through Azure, and is a fully developed web app with authentication handled by Auth0. Users can upload documents and tag them with a specific questionnaire. In the back end, a LLM-based pipeline will process the document and answer the questions of the questionnaire. The app is primed for expansion and improvements. For example, I used cosine similarity to determine the most important parts of the document. The way I break the document to compute the similarity scores is rudimentary and could be improved. Furthermore, if multiple documents are processed with the same questionnaire, business intelligence can be generated from them.</p>
 
+<h2>A Look Under the Hood</h2>
+<p>The NLP pipeline is built similarly to a retrival-augmentation-generation (RAG) pipeline, but instead of pulling from multiple documents, it only looks at the document it is trying to extract information from. While building and experimenting with the different LLMs offered by OpenAI, I noticed it was often difficult to prevent the model from <b>NOT</b> bringing outside information when answering questions, but rather <b>ONLY</b> using what it had access to from the document. To do this, I added an additional step to try and prevent this "hallucinatory" step. After an answer has been generated, I feed the parts of the document that was used to obtain the answer and the answer itself into another LLM and ask it to check if the answer could have been obtained from that text. If the answer is "yes", then the response is good to be given back to the user, otherwise, the response was hallucinated and needs to be rejected. I use a predetermined response when that happens.</p> Overall, the process works as follows:
+<ol>
+    <li>Break the document in batches of nearly equal token count</li>
+    <li>Embed each of the batches</li>
+    <li>Take a question and embed it as well</li>
+    <li>Compute cosine similarity between the question and the batches</li>
+    <li>Take the k-most similar batches and use it to answer the question</li>
+    <li>Take the answer and the k-most similar batches and run it through the hallucination check</li>
+    <li>If hallucinated, then reject, else accept</li>
+</ol>
+
 <h2>Requisite Steps</h2>
 <p>In order to start working with the application, you'll need to set up a web application and configure the appropriate resources with Azure. I recommend connecting your GitHub repository to your application so you can use Actions to facilitate creating a CI/CD pipeline. You will also need to create an account and configure resources with Auth0. Lastly, you'll need an account with OpenAI in order to use their pipelines. Once you have configure everything appropriately, you will need the following keys:</p>
 <ul>
