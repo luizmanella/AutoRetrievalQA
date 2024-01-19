@@ -12,7 +12,7 @@
     <li>Compute cosine similarity between the question and the batches</li>
     <li>Take the k-most similar batches and use it to answer the question</li>
     <li>Take the answer and the k-most similar batches and run it through the hallucination check</li>
-    <li>If hallucinated, then reject, else accept</li>
+    <li>If hallucinated, then reject, otherwise, accept</li>
 </ol>
 
 <h2>Requisite Steps</h2>
